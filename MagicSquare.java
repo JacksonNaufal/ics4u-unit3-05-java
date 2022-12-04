@@ -1,25 +1,45 @@
 /*
-* This is a towerOfHanoi program.
-* That rearrages everthing for the
-* program.
+* The program is the classic
+* what magic square program
 *
 * @author  Jackson Naufal
 * @version 1.0
-* @since   2020-11-18
+* @since   2020-12-04
 *
-* This is a tower of hanoi program
+* This is a magic square program
 */
 import java.util.ArrayList;
 
 /**
- * This is a Magic Square Finder.
+ * This is a Magic Square
  */
 final class MagicSquare {
+
+    /**
+     * The is 15.
+     */
+    public static final int MAGICNUM = 15;
+
+    /**
+     * This is 9.
+     */
+    public static final int NINE = 9;
+
     /**
      * This is 8.
      */
     public static final int EIGHT = 8;
 
+    /**
+     * This is 7.
+     */
+    public static final int SEVEN = 7;
+
+    /**
+     * The is 6.
+     */
+    public static final int SIX = 6;
+  
     /**
      * The is 5.
      */
@@ -36,26 +56,6 @@ final class MagicSquare {
     public static final int THREE = 3;
 
     /**
-     * The is 15.
-     */
-    public static final int MAGICNUM = 15;
-
-    /**
-     * This is 9.
-     */
-    public static final int NINE = 9;
-
-    /**
-     * This is 7.
-     */
-    public static final int SEVEN = 7;
-
-    /**
-     * The is 6.
-     */
-    public static final int SIX = 6;
-
-    /**
      * Prevent instantiation.
      * Throw an exception IllegalStateException.
      * if this is ever called
@@ -70,91 +70,98 @@ final class MagicSquare {
     /**
      * Function that checks for duplicates in an array.
      *
-     * @param sqrArray - array to be checked.
-     * @return boolean
+     * @param arrOne - array.
+     * @return boolean checks for dups.
      */
-    public static boolean hasDuplicates(final int[] sqrArray) {
+    public static boolean dup(final int[] arrOne) {
         final ArrayList<Integer> arr = new ArrayList<Integer>();
 
-        for (int count = 0; count < sqrArray.length; count++) {
-            for (int count2 = 1; count2 < sqrArray.length; count2++) {
-                if (sqrArray[count] == sqrArray[count2] && count != count2) {
-                    arr.add(sqrArray[count]);
+        // loops through, checks for length, and sorts array
+        for (int counter = 0; counter < arrOne.length; counter++) {
+            for (int counterTwo= 1; counterTwo< arrOne.length; counterTwo++) {
+                if (arrOne[counter] == arrOne[counterTwo] && counter != counterTwo) {
+                    arr.add(arrOne[counter]);
                 }
             }
         }
+        // returns the length
         return arr.size() != 0;
     }
 
     /**
-     * Function that generates every possible magic square.
+     * Checks for magic square.
      *
-     * @param possibleNum - possible numbers to fill sqrArray with.
-     * @param sqrArray - array to be filled and checked for "magic".
-     * @param index - current index of sqrArray.
+     * @param num possible numbers
+     * @param arrOne - array
+     * @param index - current index
      */
-    public static void genSquare(final int[] possibleNum, final int[] sqrArray,
+    public static void magicSquare(final int[] num, final int[] arrOne,
                                  final int index) {
-        if (index == NINE && isMagic(sqrArray)) {
-            printMagicSquare(sqrArray);
+        // prints valid magic squares
+        if (index == NINE && printSquare(arrOne)) {
+            generateSquare(arrOne);
         } else {
+            // run through each number for each index
             if (index != NINE) {
-                for (int count = 0; count < NINE; count++) {
-                    sqrArray[index] = possibleNum[count];
-                    genSquare(possibleNum, sqrArray, index + 1);
+                for (int counter = 0; counter < NINE; counter++) {
+                    arrOne[index] = num[counter];
+                    magicSquare(num, arrOne, index + 1);
                 }
             }
         }
     }
 
     /**
-     * Function that checks if an array is "magic".
+     * Where the magic square is printed
      *
-     * @param preSquare - array to be checked.
+     * @param baseArray - array to be checked.
      * @return boolean
      */
-    public static boolean isMagic(final int[] preSquare) {
-        final boolean returnValue;
-        if (hasDuplicates(preSquare)) {
-            returnValue = false;
+    public static boolean printSquare(final int[] baseArray) {
+        final boolean returning;
+        // checks for duplicates
+        if (dup(baseArray)) {
+            returning = false;
         } else {
             // declare rows
-            final int row1 = preSquare[0] + preSquare[1] + preSquare[2];
-            final int row2 = preSquare[THREE] + preSquare[FOUR]
-                + preSquare[FIVE];
-            final int row3 = preSquare[SIX] + preSquare[SEVEN]
-                + preSquare[EIGHT];
+            final int rowOne = baseArray[0] + baseArray[1] + baseArray[2];
+            final int rowTwo = baseArray[THREE] + baseArray[FOUR]
+                + baseArray[FIVE];
+            final int rowThree = baseArray[SIX] + baseArray[SEVEN]
+                + baseArray[EIGHT];
             // declare columns
-            final int col1 = preSquare[0] + preSquare[THREE] + preSquare[SIX];
-            final int col2 = preSquare[1] + preSquare[FOUR] + preSquare[SEVEN];
-            final int col3 = preSquare[2] + preSquare[FIVE] + preSquare[EIGHT];
+            final int columnOne = baseArray[0] + baseArray[THREE] + baseArray[SIX];
+            final int columnTwo = baseArray[1] + baseArray[FOUR] + baseArray[SEVEN];
+            final int columnThree = baseArray[2] + baseArray[FIVE] + baseArray[EIGHT];
             // declare diagonals
-            final int diag1 = preSquare[0] + preSquare[FOUR]
-                + preSquare[EIGHT];
-            final int diag2 = preSquare[2] + preSquare[FOUR] + preSquare[SIX];
+            final int diagonalOne = baseArray[0] + baseArray[FOUR]
+                + baseArray[EIGHT];
+            final int diagonalTwo = baseArray[2] + baseArray[FOUR] + baseArray[SIX];
 
-            returnValue = row1 == row2 && row2 == row3 && row3 == col1
-                && col1 == col2 && col2 == col3 && col3 == diag1
-                && diag1 == diag2 && diag2 == MAGICNUM;
+            returning = rowOne == rowTwo && rowTwo == rowThree && rowThree == columnOne
+                && columnOne == columnTwo && columnTwo == columnThree && columnThree == diagonalOne
+                && diagonalOne == diagonalTwo && diagonalTwo == MAGICNUM;
         }
-        return returnValue;
+        // returns the colomns, rows, and diagonals
+        return returning;
     }
 
     /**
-     * Function that prints a magic square with an appropriate format.
+     * Function that prints a magic square.
      *
      * @param outputSquare - array to be printed.
      */
-    public static void printMagicSquare(final int[] outputSquare) {
-        // prevent java linter error
-        final String space = " ";
+    public static void generateSquare(final int[] outputSquare) {
+        // the spaces
+        final String spaceBetweenNums = " ";
 
-        for (int count = 0; count < outputSquare.length; count++) {
-            if (count == THREE || count == SIX) {
+        // loops through the numbers
+        for (int counter = 0; counter < outputSquare.length; counter++) {
+            if (counter == THREE || counter == SIX) {
                 System.out.println();
-                System.out.print(outputSquare[count] + space);
+                System.out.print(outputSquare[counter] + spaceBetweenNums);
             } else {
-                System.out.print(outputSquare[count] + space);
+                System.out.print(outputSquare[counter] + spaceBetweenNums);
             }
         }
         System.out.println("\n");
@@ -169,9 +176,14 @@ final class MagicSquare {
         final int[] magicSquare = {
             1, 2, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE};
         final int[] extraArray = {0, 0, 0, 0, 0, 0, 0, 0, 0};
-        System.out.println("Generating all 3x3 Magic Squares...\n");
-        genSquare(magicSquare, extraArray, 0);
+        
+        // starting of the program
+        System.out.println("All Possible Magic Squares (3x3):");
+        System.out.println("");
+        magicSquare(magicSquare, extraArray, 0);
 
+        // end of program
         System.out.println("Done.");
     }
 }
+
